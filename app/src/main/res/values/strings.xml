@@ -3,4 +3,10 @@
     <string name="empty_recycler_view">
         No notes saved by the user yet!
     </string>
+
+    <string name="title"> Title </string>
+    <string name="content"> Content</string>
+    <string name="title_hint">Enter the title of the note</string>
+    <string name="content_hint">Enter the message of the note</string>
+    <string name="save_btn"> Save Note</string>
 </resources>

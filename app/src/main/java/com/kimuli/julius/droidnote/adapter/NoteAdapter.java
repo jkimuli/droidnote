@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.kimuli.julius.droidnote.R;
 import com.kimuli.julius.droidnote.model.Note;
@@ -59,11 +60,26 @@ public class NoteAdapter  extends RecyclerView.Adapter<NoteAdapter.NoteViewHolde
 
     class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        private TextView mTitleText;
+        private TextView mContentText;
+
         NoteViewHolder(View view){
             super(view);
+
+            mTitleText = view.findViewById(R.id.txtTitle);
+            mContentText = view.findViewById(R.id.txtContent);
         }
 
-        void bind(final Note note){
+        /**
+         * Method bind attaches the attributes of a given Note to the
+         * respective text fields in the UI
+         * @param note
+         */
+
+        private void bind(final Note note){
+
+            mTitleText.setText(note.getTitle());
+            mContentText.setText(note.getContent());
 
         }
 
