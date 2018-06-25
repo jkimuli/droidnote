@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="empty_recycler_view">
+        No notes saved by the user yet!
+    </string>
+</resources>
