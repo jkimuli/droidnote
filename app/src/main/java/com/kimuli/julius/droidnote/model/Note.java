@@ -17,6 +17,13 @@ public class Note {
 
     public Note(){}
 
+    public Note(String userId,String title,String content,Date timestamp){
+        this.userId = userId;
+        this.title = title;
+        this.content=content;
+        this.timestamp = timestamp;
+    }
+
     public String getUserId() {
         return userId;
     }
