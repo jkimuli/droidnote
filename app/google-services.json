@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "663304884812",
+    "firebase_url": "https://droidnote-c5413.firebaseio.com",
+    "project_id": "droidnote-c5413",
+    "storage_bucket": "droidnote-c5413.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663304884812:android:ad07b8be72d3f33d",
+        "android_client_info": {
+          "package_name": "com.kimuli.julius.droidnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663304884812-bp36l17nf3jket9vs17o3a5j5cg0bpcn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kimuli.julius.droidnote",
+            "certificate_hash": "399c5ffc7d43ec3ee494cecb58f377da5dcc4647"
+          }
+        },
+        {
+          "client_id": "663304884812-926a3mb0k27b7ter06h5mh3hc65pr60l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw4_wzNAsB6gpBTjx2taTOGAj7iH1fMgU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663304884812-926a3mb0k27b7ter06h5mh3hc65pr60l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
