@@ -1,9 +1,11 @@
 package com.kimuli.julius.droidnote;
 
 import android.app.ProgressDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,13 +44,13 @@ public class PostNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                postNote();  // start method to post the note to the firebase database
+                postNote();  // start method to post the note to the cloud database
             }
         });
     }
 
     /**
-     * This method retrieves data from the UI and saves it to firebase database
+     * This method retrieves data from the UI and saves it to realtime database
      */
     private void postNote() {
 
@@ -65,11 +67,14 @@ public class PostNoteActivity extends AppCompatActivity {
 
             String user_id = mAuth.getCurrentUser().getUid(); // return current authenticated user
 
-            Note note = new Note(user_id,title_val,content_val,new Date());
+            String today = java.text.DateFormat.getDateInstance().format(new Date());
+            Note note = new Note(user_id,title_val,content_val,today);
             mDatabaseReference.push().setValue(note);
-
             finish();
+        }
 
+        else{
+            Toast.makeText(this,"Field cant be empty",Toast.LENGTH_LONG).show();
         }
 
 

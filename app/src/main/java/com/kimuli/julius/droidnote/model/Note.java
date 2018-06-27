@@ -9,50 +9,50 @@ import java.util.Date;
 
 public class Note {
 
-    private String userId;
-    private String title;
-    private String content;
-    private Date timestamp;
+    private String mUserId;
+    private String mTitle;
+    private String mContent;
+    private String mDate;
 
 
     public Note(){}
 
-    public Note(String userId,String title,String content,Date timestamp){
-        this.userId = userId;
-        this.title = title;
-        this.content=content;
-        this.timestamp = timestamp;
+    public Note(String userId,String title,String content,String myDate){
+        this.mUserId = userId;
+        this.mTitle = title;
+        this.mContent=content;
+        this.mDate = myDate;
     }
 
     public String getUserId() {
-        return userId;
+        return mUserId;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.mUserId = userId;
     }
 
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.mTitle = title;
     }
 
     public String getContent() {
-        return content;
+        return mContent;
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.mContent = content;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public String getDate() {
+        return mDate;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(String myDate) {
+        this.mDate = myDate;
     }
 }

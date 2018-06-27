@@ -77,11 +77,15 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
         mRecyclerView.setAdapter(mNoteAdapter);
     }
 
+    private void removeFirebaseListeners(){
+        mAuth.removeAuthStateListener(mAuthStateListener);
+        mDatabaseReference.removeEventListener(databaseListener);
+    }
+
     @Override
     protected void onStop() {
 
-        mAuth.removeAuthStateListener(mAuthStateListener);
-        mDatabaseReference.removeEventListener(databaseListener);
+
         super.onStop();
     }
 
@@ -131,11 +135,13 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
 
             if(mAuth.getCurrentUser() == null){
 
-                // if no user is currently logged on start RegisterActivity
+                // if no user is currently logged on start SignInActivity
 
-                Intent newIntent = new Intent(MainActivity.this,RegisterActivity.class);
-                newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Intent newIntent = new Intent(MainActivity.this,
+                                       SignInActivity.class);
                 startActivity(newIntent);
+
+
             }
 
         }
