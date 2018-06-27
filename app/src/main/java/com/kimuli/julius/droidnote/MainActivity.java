@@ -7,10 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,13 +22,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kimuli.julius.droidnote.adapter.NoteAdapter;
+import com.kimuli.julius.droidnote.adapter.NoteViewHolder;
 import com.kimuli.julius.droidnote.model.Note;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteAdapterClickHandler {
+public class MainActivity extends AppCompatActivity  {
 
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFloatingActionButton;
@@ -32,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
-    private List<Note> mNoteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +45,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
 
         // get a reference to a node in the firebase database
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notes");
+
         mAuth = FirebaseAuth.getInstance();
-        mNoteList = new ArrayList<Note>();
-
-        mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mNoteAdapter = new NoteAdapter(this,mNoteList,this);
-        mNoteAdapter.notifyDataSetChanged();
-
-        mRecyclerView.setAdapter(mNoteAdapter);
 
         mFloatingActionButton = findViewById(R.id.fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -64,28 +60,33 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
             }
         });
 
+        FirebaseRecyclerOptions<Note> options =
+                new FirebaseRecyclerOptions.Builder<Note>()
+                        .setQuery(mDatabaseReference, Note.class)
+                        .setLifecycleOwner(this)
+                        .build();
+
+        mNoteAdapter = new NoteAdapter(options,this);
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
-        mDatabaseReference.addValueEventListener(databaseListener);
+        attachRecyclerViewAdapter();
 
-        mNoteAdapter = new NoteAdapter(this,mNoteList,this);
-        mNoteAdapter.notifyDataSetChanged();
-        mRecyclerView.setAdapter(mNoteAdapter);
     }
 
-    private void removeFirebaseListeners(){
-        mAuth.removeAuthStateListener(mAuthStateListener);
-        mDatabaseReference.removeEventListener(databaseListener);
+    private void attachRecyclerViewAdapter(){
+        mRecyclerView.setAdapter(mNoteAdapter);
     }
 
     @Override
     protected void onStop() {
-
-
+        mAuth.removeAuthStateListener(mAuthStateListener);
         super.onStop();
     }
 
@@ -113,22 +114,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
         mAuth.signOut();
     }
 
-    private ValueEventListener databaseListener =  new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-
-            for (DataSnapshot data: dataSnapshot.getChildren()) {
-                Note note = data.getValue(Note.class);
-                mNoteList.add(note);
-            }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    };
-
     private FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener() {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -141,14 +126,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.NoteA
                                        SignInActivity.class);
                 startActivity(newIntent);
 
-
             }
 
         }
     };
 
-    @Override
-    public void onClick(int id) {
 
-    }
 }
