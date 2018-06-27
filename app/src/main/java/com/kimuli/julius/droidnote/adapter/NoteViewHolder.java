@@ -10,12 +10,16 @@ public class NoteViewHolder extends RecyclerView.ViewHolder{
 
         private TextView mTitleText;
         private TextView mContentText;
+        private View divider;
+        private TextView mDateText;
 
         NoteViewHolder(View view){
             super(view);
 
             mTitleText = view.findViewById(R.id.txtTitle);
             mContentText = view.findViewById(R.id.txtContent);
+            divider = view.findViewById(R.id.view);
+            mDateText = view.findViewById(R.id.textDate);
         }
 
         /**
@@ -28,6 +32,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder{
 
             mTitleText.setText(note.getTitle());
             mContentText.setText(note.getContent());
+            mDateText.setText(note.getDate());
 
         }
 

@@ -3,5 +3,6 @@
 
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">8dp</dimen>
+    <dimen name="divider">1dp</dimen>
 
 </resources>

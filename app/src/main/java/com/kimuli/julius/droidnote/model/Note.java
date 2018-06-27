@@ -52,7 +52,7 @@ public class Note {
         return mDate;
     }
 
-    public void setTimestamp(String myDate) {
+    public void setDate(String myDate) {
         this.mDate = myDate;
     }
 }
