@@ -9,9 +9,5 @@
     <string name="title_hint">Enter the title of the note</string>
     <string name="content_hint">Enter the message of the note</string>
     <string name="save_btn"> Save Note</string>
-    <string name="email_hint">Email...</string>
-    <string name="password_hint">Password ...</string>
-    <string name="confirm_password_hint">Confirm Password...</string>
-    <string name="sign_up_btn_text">Sign Up</string>
     <string name="log_out_menu">Log Out</string>
 </resources>

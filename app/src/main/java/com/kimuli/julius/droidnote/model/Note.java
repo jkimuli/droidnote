@@ -1,7 +1,5 @@
 package com.kimuli.julius.droidnote.model;
 
-import java.util.Date;
-
 
 /** This POJO represents a single note that can be saved by a given
  * user in the database
@@ -13,7 +11,6 @@ public class Note {
     private String mTitle;
     private String mContent;
     private String mDate;
-
 
     public Note(){}
 

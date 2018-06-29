@@ -6,9 +6,4 @@
         android:id="@+id/menu_logout"
         app:showAsAction="never"/>
 
-    <item android:title="Settings"
-        android:id="@+id/menu_settings"
-        app:showAsAction="never"/>
-
-
 </menu>

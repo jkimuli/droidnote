@@ -19,7 +19,6 @@
         <activity
             android:name=".PostNoteActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SignInActivity"></activity>
     </application>
 
 </manifest>

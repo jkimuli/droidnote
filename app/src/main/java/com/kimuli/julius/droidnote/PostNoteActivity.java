@@ -1,29 +1,27 @@
 package com.kimuli.julius.droidnote;
 
-import android.app.ProgressDialog;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kimuli.julius.droidnote.model.Note;
+import com.kimuli.julius.droidnote.utils.DatabaseUtil;
 
 import java.util.Date;
 
-public class PostNoteActivity extends AppCompatActivity {
+public class PostNoteActivity extends AppCompatActivity{
 
     private EditText mTitle;
     private EditText mContent;
-    private Button mSaveButton;
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mAuth;
@@ -35,10 +33,10 @@ public class PostNoteActivity extends AppCompatActivity {
 
         mTitle = findViewById(R.id.editTextTitle);
         mContent = findViewById(R.id.editTextContent);
-        mSaveButton = findViewById(R.id.save_btn);
+        Button mSaveButton = findViewById(R.id.save_btn);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notes");
+        mDatabaseReference = DatabaseUtil.getDatabase().getReference().child("Notes");
 
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +47,9 @@ public class PostNoteActivity extends AppCompatActivity {
         });
     }
 
+
     /**
-     * This method retrieves data from the UI and saves it to realtime database
+     * This method retrieves data from the UI and saves it to Firebase Realtime database
      */
     private void postNote() {
 
@@ -61,7 +60,6 @@ public class PostNoteActivity extends AppCompatActivity {
         final String title_val = mTitle.getText().toString().trim();
         final String content_val = mContent.getText().toString().trim();
 
-
         if(!TextUtils.isEmpty(title_val) && !TextUtils.isEmpty(content_val)){
             // only post notes with non empty title and content fields
 
@@ -69,14 +67,34 @@ public class PostNoteActivity extends AppCompatActivity {
 
             String today = java.text.DateFormat.getDateInstance().format(new Date());
             Note note = new Note(user_id,title_val,content_val,today);
-            mDatabaseReference.push().setValue(note);
-            finish();
+
+            mDatabaseReference.push().setValue(note)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(PostNoteActivity.this,
+                                           "Record added to database",
+                                            Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            // show the reason for fail to save to database
+                            Toast.makeText(PostNoteActivity.this,
+                                           e.getLocalizedMessage(),
+                                           Toast.LENGTH_LONG).show();
+                          }
+                    });
+
+            finish();  // return to Main Activity
         }
 
         else{
+
             Toast.makeText(this,"Field cant be empty",Toast.LENGTH_LONG).show();
         }
-
 
     }
 }
