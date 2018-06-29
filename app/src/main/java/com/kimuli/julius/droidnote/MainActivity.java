@@ -7,37 +7,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.kimuli.julius.droidnote.adapter.NoteAdapter;
 import com.kimuli.julius.droidnote.model.Note;
 import com.kimuli.julius.droidnote.utils.DatabaseUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickHandler{
+public class MainActivity extends AppCompatActivity{
 
     private static final int REQUEST_SIGN_IN = 1;
+    public static final String EXTRA_DATABASE_REFERENCE_KEY ="com.kimuli.julius.droidnote.key";
 
     private RecyclerView mRecyclerView;
-    private NoteAdapter mNoteAdapter;
+    private TextView mEmptyRecycler;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseRecyclerAdapter mRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
 
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mEmptyRecycler = findViewById(R.id.empty_recycler_view);
 
         FloatingActionButton mFloatingActionButton = findViewById(R.id.fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         if(mAuthStateListener!=null){
             mAuth.removeAuthStateListener(mAuthStateListener);
         }
-        mNoteAdapter.stopListening();
+
         super.onPause();
     }
 
@@ -139,14 +143,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         }
     }
 
-
-    @Override
-    public void onItemClickListener(DatabaseReference mRef) {
-
-        Toast.makeText(this,mRef.child("title").toString(),Toast.LENGTH_SHORT).show();
-
-    }
-
     /*
      * Method is used to logout the current authenticated user
      */
@@ -162,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
        recycler view
      */
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
 
         /*
            Construct Firebase Query that only returns the notes that have created by
@@ -170,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
          */
 
         Query myQuery = mDatabaseReference.orderByChild("userId")
-                            .equalTo(mAuth.getCurrentUser().getUid());
+                .equalTo(mAuth.getCurrentUser().getUid());
 
         FirebaseRecyclerOptions<Note> options =
                 new FirebaseRecyclerOptions.Builder<Note>()
@@ -178,11 +174,62 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
                         .setLifecycleOwner(this)
                         .build();
 
-        mNoteAdapter = new NoteAdapter(this,options,this);
-        mRecyclerView.setAdapter(mNoteAdapter);
+        mRecyclerAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
 
-        mNoteAdapter.startListening();
+            @NonNull
+            @Override
+            public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_note, parent, false);
 
+                return new NoteViewHolder(view);
+            }
+
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                // show a message to invite the user to add notes if recycler view is empty
+                mEmptyRecycler.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+
+            }
+
+            @Override
+            public void onError(@NonNull DatabaseError error) {
+                super.onError(error);
+
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull NoteViewHolder holder,
+                                            final int position, @NonNull Note model){
+                holder.bind(model);
+                holder.getView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String mRef = getRef(position).getKey();
+                        Toast.makeText(MainActivity.this,
+                                      mRef,Toast.LENGTH_SHORT).show();
+                        startPostModify(mRef);
+                    }
+                });
+            }
+
+        };
+
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+    }
+
+    /**
+     * Method once passed a string key for clicked item start the PostNoteActivity in update
+     * mode.
+     * @param mRef
+     */
+
+    private void startPostModify(String mRef) {
+
+        Intent updateIntent = new Intent(MainActivity.this,PostNoteActivity.class);
+        updateIntent.putExtra(EXTRA_DATABASE_REFERENCE_KEY,mRef);
+        startActivity(updateIntent);
     }
 
 
@@ -206,5 +253,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
                 REQUEST_SIGN_IN);
 
     }
+
 
 }

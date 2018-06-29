@@ -10,15 +10,15 @@ public class Note {
     private String mUserId;
     private String mTitle;
     private String mContent;
-    private String mDate;
+    private String mCreatedAt;
 
     public Note(){}
 
-    public Note(String userId,String title,String content,String myDate){
+    public Note(String userId,String title,String content,String my_date){
         this.mUserId = userId;
         this.mTitle = title;
         this.mContent=content;
-        this.mDate = myDate;
+        this.mCreatedAt = my_date;
     }
 
     public String getUserId() {
@@ -45,11 +45,11 @@ public class Note {
         this.mContent = content;
     }
 
-    public String getDate() {
-        return mDate;
+    public String getCreatedAt() {
+        return mCreatedAt;
     }
 
-    public void setDate(String myDate) {
-        this.mDate = myDate;
+    public void setCreatedAt(String myDate) {
+        this.mCreatedAt = myDate;
     }
 }
