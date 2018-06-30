@@ -207,8 +207,7 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onClick(View v) {
                         String mRef = getRef(position).getKey();
-                        Toast.makeText(MainActivity.this,
-                                      mRef,Toast.LENGTH_SHORT).show();
+
                         startPostModify(mRef);
                     }
                 });

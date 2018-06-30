@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,10 +90,6 @@ public class PostNoteActivity extends AppCompatActivity{
      */
     private void postNote() {
 
-        /**final ProgressDialog progressDialog = new ProgressDialog(PostNoteActivity.this);
-        progressDialog.setMessage("Posting your Note");
-        progressDialog.show();**/
-
         final String title_val = mTitle.getText().toString().trim();
         final String content_val = mContent.getText().toString().trim();
 
@@ -120,6 +117,7 @@ public class PostNoteActivity extends AppCompatActivity{
                             Toast.makeText(PostNoteActivity.this,
                                            e.getLocalizedMessage(),
                                            Toast.LENGTH_LONG).show();
+
                           }
                     });
 
@@ -132,6 +130,10 @@ public class PostNoteActivity extends AppCompatActivity{
         }
 
     }
+
+    /*
+       Method updates a single existing child node in the Firebase cloud database
+     */
 
     private void updateNote(DatabaseReference mRef){
 
