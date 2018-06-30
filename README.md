@@ -10,13 +10,13 @@ from [Google](http://firebase.google.com).
 ### Getting started
 
 You can clone this project using git to get to your local machine and import as a Gradle Project
-in Android Studio
+into Android Studio
 
 ### Todo
 * Implement Android architecture patterns
 * Polish the UI
+* Implementing Test Suites
 * Add Functionality to delete already existing notes
-
 
 ### Authors
 
