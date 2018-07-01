@@ -20,7 +20,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.kimuli.julius.droidnote.model.Note;
@@ -36,11 +35,11 @@ public class MainActivity extends AppCompatActivity{
 
     private RecyclerView mRecyclerView;
     private TextView mEmptyRecycler;
+    private FirebaseRecyclerAdapter mRecyclerAdapter;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private FirebaseRecyclerAdapter mRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +79,18 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 // create an intent to start the PostNote Activity
+
                 Intent startIntent = new Intent(MainActivity.this,
-                                                PostNoteActivity.class);
+                                               PostNoteActivity.class);
                 startActivity(startIntent);
+
             }
         });
 
    }
 
     @Override
-    protected void onResume() {
+    protected void onResume(){
         super.onResume();
         mAuth.addAuthStateListener(mAuthStateListener);
 
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == REQUEST_SIGN_IN){
@@ -149,7 +150,6 @@ public class MainActivity extends AppCompatActivity{
     private void logout() {
 
         AuthUI.getInstance().signOut(this);
-
     }
 
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity{
                         .setLifecycleOwner(this)
                         .build();
 
-        mRecyclerAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
+        FirebaseRecyclerAdapter mRecyclerAdapter = new FirebaseRecyclerAdapter<Note, NoteViewHolder>(options) {
 
             @NonNull
             @Override
@@ -194,19 +194,13 @@ public class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onError(@NonNull DatabaseError error) {
-                super.onError(error);
-
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull NoteViewHolder holder,
-                                            final int position, @NonNull Note model){
+            protected void onBindViewHolder(@NonNull final NoteViewHolder holder,
+                                            int position, @NonNull Note model){
                 holder.bind(model);
                 holder.getView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String mRef = getRef(position).getKey();
+                        String mRef = getRef(holder.getAdapterPosition()).getKey();
 
                         startPostModify(mRef);
                     }
@@ -216,12 +210,12 @@ public class MainActivity extends AppCompatActivity{
         };
 
         mRecyclerView.setAdapter(mRecyclerAdapter);
+
     }
 
     /**
      * Method once passed a string key for clicked item start the PostNoteActivity in update
      * mode.
-     * @param mRef
      */
 
     private void startPostModify(String mRef) {
@@ -252,6 +246,5 @@ public class MainActivity extends AppCompatActivity{
                 REQUEST_SIGN_IN);
 
     }
-
 
 }

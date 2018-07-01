@@ -9,12 +9,12 @@ import com.kimuli.julius.droidnote.model.Note;
 
 class NoteViewHolder extends RecyclerView.ViewHolder{
 
-    private TextView mTitleText;
-    private TextView mContentText;
-    private View divider;
-    private TextView mDateText;
+    private final TextView mTitleText;
+    private final TextView mContentText;
+    private final View divider;
+    private final TextView mDateText;
 
-    View mView;
+    private final View mView;
 
     NoteViewHolder(View itemView){
         super(itemView);
