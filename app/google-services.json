@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "663304884812-qk23pkijveijiuagd0mh104vr97nuvuh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kimuli.julius.droidnote",
+            "certificate_hash": "5f11ee68261128e4e42c645b02b49c8ee8fbdff3"
+          }
+        },
+        {
           "client_id": "663304884812-926a3mb0k27b7ter06h5mh3hc65pr60l.apps.googleusercontent.com",
           "client_type": 3
         }
